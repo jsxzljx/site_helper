@@ -2,8 +2,8 @@
 
 {% for i in info %}
 
-<div class="douban-wrapper"><div class="card"><div class="img-bg" style="background:url(http://192.168.0.110:8000/img/{{ i.img }})"></div><ul>
-<li><a href="{{ i.url }}" target="_blank"><img class="pic" title="{{ i.title }} | 上映于2019年" src="http://192.168.0.110:8000/img/{{ i.img }}"></a></li>
+<div class="douban-wrapper"><div class="card"><div class="img-bg" style="background:url(/img/{{ i.img }})"></div><ul>
+<li><a href="{{ i.url }}" target="_blank"><img class="pic" title="{{ i.title }} | 上映于2019年" src="/img/{{ i.img }}"></a></li>
 <li class="title">{{ i.title }} ({{ i.intro }})</li>
 <li class="rate">{{ i.rating }}<span class="watch-date"> @{{ i.day }}</span></li>
 <li class="comment">{{ i.comment }}</li>

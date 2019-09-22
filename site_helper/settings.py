@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd^w=@afdoa%4tm_5c9^rk9s64-e56iktf(+qb^9me8i2zj%-jy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['192.168.0.110']
 
@@ -60,7 +60,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:2368',
     'http://localhost:2368',
     'http://192.168.0.110:2368',
-    'http://192.168.0.110:8000'
+    'http://192.168.0.110:8000',
+    'http://jiaxi.me'
 )
 
 # fix CORS problem
