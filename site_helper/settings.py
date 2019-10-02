@@ -25,7 +25,7 @@ SECRET_KEY = 'd^w=@afdoa%4tm_5c9^rk9s64-e56iktf(+qb^9me8i2zj%-jy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'jiax.me']
+ALLOWED_HOSTS = ['localhost', 'jiaxi.me']
 
 
 # Application definition
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 # fix CORS problem
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:2368',
-    'http://jiaxi.me'
+    'https://jiaxi.me'
 )
 
 # fix CORS problem
