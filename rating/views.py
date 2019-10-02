@@ -9,6 +9,10 @@ from bs4 import BeautifulSoup
 import re
 from datetime import datetime, timezone, date, timedelta
 import os
+from django.template import loader
+from django.http import JsonResponse
+import json
+
 
 class Updater:
     def __init__(self):
@@ -46,6 +50,7 @@ class Updater:
 
         img_urls = [i["img"] for i in info]
         self.__save_imgs(img_urls)
+        User.objects.update_or_create(uid=uid, defaults={"update_time": datetime.now(tz=timezone.utc)})
         print("[update db] successfully init/update {} records for uid={}".format(len(info), uid))
 
     def __save_imgs(self, img_urls):
@@ -119,20 +124,38 @@ updater = Updater()
 
 
 def get(request):
+    # 1. parse request
     uid = request.GET.get('uid', "162495312")
     start = int(request.GET.get('start', 0))
-    len = int(request.GET.get('len', 12))
+    step = int(request.GET.get('step', 12))
+    last_date = request.GET.get('last_date', '')
+    filter_ = request.GET.get('filter', '')  # examples: "2019", "2019,08"
+    # 2. initialize/check the user
     if not User.objects.filter(uid=uid).exists():
         updater.init_uid(uid)
-        User.objects.update_or_create(uid=uid, defaults={"update_time": datetime.now(tz=timezone.utc)})
-
     update_time = User.objects.get(uid=uid).update_time
     if update_time and update_time < datetime.now(tz=timezone.utc) - timedelta(days=1):
         # update the db every 1 day
         updater.update_uid(uid)
+
+    # 3. fetch info from database
+    filters = {"uid": uid}
+    if len(filter_) > 0:
+        suffixes = ["year", "month"]
+        # see https://docs.djangoproject.com/en/2.2/ref/models/querysets/#date
+        for idx, val in enumerate(filter_.split(",")):
+            filters["day__" + suffixes[idx]] = int(val)
+    all_items = Movie.objects.filter(**filters).order_by('-day')
+    items = all_items[start:start + step]
+    update_time = User.objects.get(uid=uid).update_time
+
+    # 4. generate results
     info = []
-    for item in Movie.objects.filter(uid=uid).order_by('-day')[start:start + len]:
+    for idx, item in enumerate(items):
+        if last_date == '' or items[idx].day.strftime("%Y%m") != last_date:
+            info.append({"type": "head", "time": items[idx].day.strftime("%Y/%m")})
         info.append({
+            "type": "card",
             "title": item.title,
             "img": item.img,
             "day": item.day.strftime("%Y/%m/%d"),
@@ -141,7 +164,13 @@ def get(request):
             "url": item.url,
             "intro": item.intro,
         })
-    return render(request, 'index.html', {"info": info})
-
-
-
+        last_date = items[idx].day.strftime("%Y%m")
+    last_date = last_date if len(items) > 0 else ''
+    rsp = {
+        "info": loader.render_to_string('index.html', {"info": info}),
+        "update_time": update_time.strftime("%b %m, %Y"),
+        "last_date": last_date,
+        "remain": max(len(all_items) - start - step, 0)
+    }
+    return HttpResponse(json.dumps(rsp), content_type='application/json')
+    # return render(request, 'index.html', {"info": info})
