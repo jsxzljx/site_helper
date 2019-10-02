@@ -18,6 +18,6 @@ from django.urls import path
 from rating import views as rating_views
 
 urlpatterns = [
-    path('', rating_views.get),
+    path('rating/', rating_views.get),
     path('admin/', admin.site.urls),
 ]

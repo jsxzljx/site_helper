@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd^w=@afdoa%4tm_5c9^rk9s64-e56iktf(+qb^9me8i2zj%-jy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.110']
+ALLOWED_HOSTS = ['localhost', 'jiax.me']
 
 
 # Application definition
@@ -55,12 +55,7 @@ MIDDLEWARE = [
 
 # fix CORS problem
 CORS_ORIGIN_WHITELIST = (
-    'https://127.0.0.1:2368',
-    'https://localhost:2368',
-    'http://127.0.0.1:2368',
     'http://localhost:2368',
-    'http://192.168.0.110:2368',
-    'http://192.168.0.110:8000',
     'http://jiaxi.me'
 )
 
@@ -135,7 +130,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/img/'  # fake url displayed in request URL
+STATIC_URL = '/static/'  # fake url displayed in request URL
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'imgs'),  # real directory in this project
 )
