@@ -168,7 +168,7 @@ def get(request):
     last_date = last_date if len(items) > 0 else ''
     rsp = {
         "info": loader.render_to_string('index.html', {"info": info}),
-        "update_time": update_time.strftime("%b %m, %Y"),
+        "update_time": update_time.strftime("%b %d, %Y"),
         "last_date": last_date,
         "remain": max(len(all_items) - start - step, 0)
     }
