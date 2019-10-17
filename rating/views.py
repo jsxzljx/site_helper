@@ -130,11 +130,12 @@ def get(request):
     step = int(request.GET.get('step', 12))
     last_date = request.GET.get('last_date', '')
     filter_ = request.GET.get('filter', '')  # examples: "2019", "2019,08"
+    refresh = int(request.GET.get('refresh', 0))
     # 2. initialize/check the user
     if not User.objects.filter(uid=uid).exists():
         updater.init_uid(uid)
     update_time = User.objects.get(uid=uid).update_time
-    if update_time and update_time < datetime.now(tz=timezone.utc) - timedelta(days=1):
+    if (update_time and update_time < datetime.now(tz=timezone.utc) - timedelta(days=1)) or refresh:
         # update the db every 1 day
         updater.update_uid(uid)
 
