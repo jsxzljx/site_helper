@@ -13,6 +13,7 @@ from django.template import loader
 from django.http import JsonResponse
 import json
 
+UA = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
 
 class Updater:
     def __init__(self):
@@ -83,7 +84,7 @@ class Updater:
         return info
 
     def __get_rating_list(self, link):
-        doc = requests.get(link)
+        doc = requests.get(link, headers={'User-Agent': UA})
         doc.encoding = 'utf-8'
         soup = BeautifulSoup(doc.text, features="lxml")
         items = soup.find_all(class_='item')
