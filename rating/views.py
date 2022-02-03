@@ -86,7 +86,7 @@ class Updater:
     def __get_rating_list(self, link):
         doc = requests.get(link, headers={'User-Agent': UA})
         doc.encoding = 'utf-8'
-        soup = BeautifulSoup(doc.text, features="lxml")
+        soup = BeautifulSoup(doc.text)  # , features="lxml"
         items = soup.find_all(class_='item')
         res = []
         for item in items:
